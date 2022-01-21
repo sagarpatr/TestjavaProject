@@ -18,7 +18,10 @@ jobs:
       - checkout
       - run:
           name: Code Compile
-          command: echo "Code build" && touch test.txt && ls -l
+          command: |
+            echo "Code build" 
+            mvn clean install -Dskiptests
+
   Sonar Scan:
     docker:
       - image: cimg/openjdk:11.0
@@ -51,7 +54,9 @@ jobs:
       - checkout
       - run:
           name: Code Test
-          command: echo "Code test" && ls -l
+          command: |
+            echo "Code Test Started" 
+            mvn test
 
   Docker Build:
     docker:
