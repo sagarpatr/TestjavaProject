@@ -32,6 +32,7 @@ jobs:
           name: Code Compile
           command: |
             echo "Code build"
+            touch test.txt /tmp/workspace/test.txt
             echo 
             pwd
             ls -l 
@@ -75,7 +76,7 @@ jobs:
             echo "Code Test Started"
             echo "The workspace path is ${CIRCLE_WORKING_DIRECTORY}"
             pwd
-            ls -l
+            ls -l /tmp/workspace/test.txt
             mvn -v
 
   Docker Build:
