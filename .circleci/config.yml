@@ -145,52 +145,52 @@ workflows:
     when: << pipeline.parameters.run_integration_tests  >>
     jobs:
       - Integration Test
-  nightly-build:
-    when: << pipeline.parameters.run-schedule >>
-    jobs:
-      - Code Compile
-      - Code Test:
-          requires:
-            - Code Compile
-      - Deploy:
-          requires:
-            - Code Compile        
-  Helm Helloworld: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  # nightly-build:
+  #   when: << pipeline.parameters.run-schedule >>
+  #   jobs:
+  #     - Code Compile
+  #     - Code Test:
+  #         requires:
+  #           - Code Compile
+  #     - Deploy:
+  #         requires:
+  #           - Code Compile        
+  # Helm Helloworld: # This is the name of the workflow, feel free to change it to better match your workflow.
+  #   # Inside the workflow, you define the jobs you want to run.
     
-    jobs:
-      - Code Compile
-      - Blackduck Scan
-      - Coverity Scan
-      - Sonar Scan
-      - Code Test:
-          requires:
-            - Code Compile
-      - Docker Build:
-          requires:
-            - Code Compile            
-      - Docker Publish:
-          requires:
-            - Docker Build
-      - Helm Build:
-          requires:
-            - Code Compile
-      - Helm Publish:
-          requires:
-            - Helm Build 
-      - Artifact Publish:
-          requires:
-            - Code Compile             
-      # - hold:
-      #     type: approval
-      #     requires:
-      #       - Docker Publish
-      #       - Helm Publish            
-      - Deploy:
-          requires:
-            # - hold
-            - Helm Publish
-            - Docker Publish             
+  #   jobs:
+  #     - Code Compile
+  #     - Blackduck Scan
+  #     - Coverity Scan
+  #     - Sonar Scan
+  #     - Code Test:
+  #         requires:
+  #           - Code Compile
+  #     - Docker Build:
+  #         requires:
+  #           - Code Compile            
+  #     - Docker Publish:
+  #         requires:
+  #           - Docker Build
+  #     - Helm Build:
+  #         requires:
+  #           - Code Compile
+  #     - Helm Publish:
+  #         requires:
+  #           - Helm Build 
+  #     - Artifact Publish:
+  #         requires:
+  #           - Code Compile             
+  #     # - hold:
+  #     #     type: approval
+  #     #     requires:
+  #     #       - Docker Publish
+  #     #       - Helm Publish            
+  #     - Deploy:
+  #         requires:
+  #           # - hold
+  #           - Helm Publish
+  #           - Docker Publish             
 
   # We run a nightly build for running build/maintenance tasks
   # such as pulling in docker image tags or automating our api documentation
