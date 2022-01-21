@@ -35,7 +35,7 @@ jobs:
             echo "Code build"
             echo "workspace path is ${CIRCLE_WORKING_DIRECTORY}"
             pwd
-            touch test.txt
+            touch test.txt test1.txt
             pwd
             ls -l 
             mvn -v
