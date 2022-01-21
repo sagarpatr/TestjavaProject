@@ -33,8 +33,8 @@ jobs:
           command: |
             echo "Code build"
             pwd
-            touch /tmp/workspace/test.txt
-            ls -l /tmp/workspace
+            touch test.txt
+            ls -l 
             mvn -v
 
   Sonar Scan:
