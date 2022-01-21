@@ -42,7 +42,9 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root       
           paths: 
-            - test.txt        
+            - test.txt
+            - deploymwnt
+            - docker        
 
   Sonar Scan:
     docker:
