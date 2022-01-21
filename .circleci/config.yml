@@ -110,7 +110,9 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - Code Compile
-      - Code Compile2
+      - Blackduck Scan
+      - Coverity Scan
+      - Sonar Scan
       - Code Test:
           requires:
             - Code Compile
