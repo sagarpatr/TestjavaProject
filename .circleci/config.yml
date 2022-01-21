@@ -9,7 +9,7 @@ parameters:
     type: boolean
     default: false    
 references:
-  workspace_root: &workspace_root /tmp/workspace
+  workspace_root: &workspace_root /root/project
   attach_workspace: &attach_workspace
     attach_workspace:
       at: *workspace_root
