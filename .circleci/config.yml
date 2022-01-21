@@ -134,6 +134,7 @@ jobs:
           command: |
             echo "execute helm build"
             touch test4.txt
+            ls -l
       - persist_to_workspace:
           root: *workspace_root       
           paths: 
