@@ -46,6 +46,7 @@ jobs:
   Code Test:
     docker:
       - image: cimg/openjdk:11.0
+    parallelism: 4  
     steps:
       - checkout
       - run:
