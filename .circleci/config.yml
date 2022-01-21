@@ -79,7 +79,7 @@ jobs:
             echo "Code Test Started"
             echo "The workspace path is ${CIRCLE_WORKING_DIRECTORY}"
             pwd
-            ls -l /tmp/workspace/test.txt
+            ls -l /tmp/workspace/
             mvn -v
 
   Docker Build:
