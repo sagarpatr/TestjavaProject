@@ -8,13 +8,16 @@ jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
   Code Compile:
     docker:
-      - image: cimg/openjdk:11.0
+      - image: sagarpatro/maven123
+        auth:
+          username: sagarpatro
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference      
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
       - run:
-          name: Build Code
+          name: Code Compile
           command: echo "Code build" && touch test.txt && ls -l
   Sonar Scan:
     docker:
@@ -52,7 +55,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Test Code
+          name: Code Test
           command: echo "Code test" && ls -l
 
   Docker Build:
@@ -64,7 +67,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: test
+          name: Docker Build
           command: echo "execute docke rbuild command"
 
   Helm Build:
@@ -73,7 +76,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: test
+          name: Helm Build
           command: echo "execute helm build"
 
   Docker Publish:
@@ -82,7 +85,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: test
+          name: Docker Publish
           command: echo "Code test"
 
   Helm Publish:
@@ -91,7 +94,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: test
+          name: Helm Publish
           command: echo "Code test"             
 
   Deploy:
