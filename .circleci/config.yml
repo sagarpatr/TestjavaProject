@@ -11,7 +11,7 @@ jobs:
       - image: sagarpatro/maven123
         auth:
           username: sagarpatro
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference      
+#           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference      
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
