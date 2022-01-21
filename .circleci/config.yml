@@ -89,7 +89,16 @@ jobs:
       - checkout
       - run:
           name: Integration Test
-          command: echo "Integration test command"          
+          command: echo "Integration test command"   
+
+  nightly-build:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: nightly build
+          command: echo "nightly build command"                   
 
   Helm Build:
     docker:
@@ -145,16 +154,16 @@ workflows:
     when: << pipeline.parameters.run_integration_tests  >>
     jobs:
       - Integration Test
-  # nightly-build:
-  #   when: << pipeline.parameters.run-schedule >>
-  #   jobs:
-  #     - Code Compile
-  #     - Code Test:
-  #         requires:
-  #           - Code Compile
-  #     - Deploy:
-  #         requires:
-  #           - Code Compile        
+  nightly-build:
+    when: << pipeline.parameters.run-schedule >>
+    jobs:
+      - Code Compile
+      - Code Test:
+          requires:
+            - Code Compile
+      - Deploy:
+          requires:
+            - Code Compile        
   # Helm Helloworld: # This is the name of the workflow, feel free to change it to better match your workflow.
   #   # Inside the workflow, you define the jobs you want to run.
     
