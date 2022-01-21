@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Build Code
           command: echo "Code build" && touch test.txt && ls -l
-  Code Compile2:
+  Sonar Scan:
     docker:
       - image: cimg/openjdk:11.0
     # Add steps to the job
@@ -24,8 +24,28 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build Code
-          command: echo "Code build" && touch test.txt && ls -l          
+          name: Sonar Scan
+          command: echo "Sonar Scan command execution" 
+  Blackduck Scan:
+    docker:
+      - image: cimg/openjdk:11.0
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run:
+          name: Sonar Scan
+          command: echo "Blackduck Scan command execution" 
+  Coverity Scan:
+    docker:
+      - image: cimg/openjdk:11.0
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run:
+          name: Sonar Scan
+          command: echo "Coverity Scan command execution"              
   Code Test:
     docker:
       - image: cimg/openjdk:11.0
