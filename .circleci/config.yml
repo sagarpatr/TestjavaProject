@@ -83,6 +83,7 @@ jobs:
           command: |
             echo "Code Test Started"
             echo "The workspace path is ${CIRCLE_WORKING_DIRECTORY}"
+            touch test3.txt
             pwd
             ls -l 
             mvn -v
@@ -91,7 +92,8 @@ jobs:
     docker:
       - image: cimg/openjdk:11.0
     steps:
-      - checkout
+      - *attach_workspace
+      # - checkout
       - run:
           name: Docker Build
           command: echo "execute docke rbuild command"
