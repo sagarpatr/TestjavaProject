@@ -56,7 +56,7 @@ jobs:
           name: Code Test
           command: |
             echo "Code Test Started" 
-            mvn test
+            mvn -v
 
   Docker Build:
     docker:
