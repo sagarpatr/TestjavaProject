@@ -97,7 +97,9 @@ jobs:
       # - checkout
       - run:
           name: Docker Build
-          command: echo "execute docke rbuild command"
+          command: |
+            echo "execute docke rbuild command"
+            ls -l
   Integration Test:
     docker:
       - image: cimg/openjdk:11.0
