@@ -27,8 +27,8 @@ jobs:
           name: Code Compile
           command: |
             echo "Code build"
-            touch test.txt
-            ls -l
+            touch /tmp/workspace/test.txt
+            ls -l /tmp/workspace
             mvn -v
 
   Sonar Scan:
@@ -65,7 +65,7 @@ jobs:
       - run:
           name: Code Test
           command: |
-            echo "Code Test Started" && ls -l
+            echo "Code Test Started" && ls -l /tmp/workspace
             mvn -v
 
   Docker Build:
