@@ -71,7 +71,7 @@ jobs:
       - run:
           name: Code Test
           command: |
-            echo "Code Test Started" && ls -l /tmp/workspace
+            echo "Code Test Started" && ls -l 
             mvn -v
 
   Docker Build:
