@@ -32,7 +32,10 @@ jobs:
           name: Code Compile
           command: |
             echo "Code build"
-            touch test.txt /tmp/workspace/test.txt
+            echo "workspace path is ${CIRCLE_WORKING_DIRECTORY}"
+            pwd
+            cd /tmp/workspace
+            touch test.txt
             echo 
             pwd
             ls -l 
