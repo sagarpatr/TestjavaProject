@@ -20,7 +20,7 @@ jobs:
           name: Code Compile
           command: |
             echo "Code build" 
-            mvn clean install -Dskiptests
+            mvn -v
 
   Sonar Scan:
     docker:
