@@ -22,8 +22,6 @@ jobs:
   Sonar Scan:
     docker:
       - image: cimg/openjdk:11.0
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
       - run:
@@ -32,8 +30,6 @@ jobs:
   Blackduck Scan:
     docker:
       - image: cimg/openjdk:11.0
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
       - run:
@@ -42,8 +38,6 @@ jobs:
   Coverity Scan:
     docker:
       - image: cimg/openjdk:11.0
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
       - run:
@@ -86,7 +80,7 @@ jobs:
       - checkout
       - run:
           name: Docker Publish
-          command: echo "Code test"
+          command: echo "Docker publish execution"
 
   Helm Publish:
     docker:
@@ -95,7 +89,16 @@ jobs:
       - checkout
       - run:
           name: Helm Publish
-          command: echo "Code test"             
+          command: echo "Helm publish execution"   
+          
+  Artifact Publish:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: Artifact Publish
+          command: echo "Artifact publish execution"             
 
   Deploy:
     docker:
@@ -133,6 +136,9 @@ workflows:
       - Helm Publish:
           requires:
             - Helm Build 
+      - Artifact Publish:
+          requires:
+            - Code Compile             
       - hold:
           type: approval
           requires:
