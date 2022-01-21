@@ -73,6 +73,8 @@ jobs:
           name: Code Test
           command: |
             echo "Code Test Started"
+            echo "The workspace path is ${CIRCLE_WORKING_DIRECTORY}"
+            pwd
             ls -l
             mvn -v
 
