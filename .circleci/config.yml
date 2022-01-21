@@ -42,7 +42,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root       
           paths: 
-            - /tmp/workspace/*        
+            - test.txt        
 
   Sonar Scan:
     docker:
