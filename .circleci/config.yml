@@ -1,7 +1,13 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
+parameters:
+  run_integration_tests:
+    type: boolean
+    default: true
+  run-schedule:
+    type: boolean
+    default: true    
 references:
   workspace_root: &workspace_root
     /tmp/workspace
@@ -76,6 +82,14 @@ jobs:
       - run:
           name: Docker Build
           command: echo "execute docke rbuild command"
+  Integration Test:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: Integration Test
+          command: echo "Integration test command"          
 
   Helm Build:
     docker:
@@ -127,8 +141,23 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
+  integration_tests:
+    when: << pipeline.parameters.run_integration_tests  >>
+    jobs:
+      - Integration Test
+  nightly-build:
+    when: << pipeline.parameters.run-schedule >>
+    jobs:
+      - Code Compile
+      - Code Test:
+          requires:
+            - Code Compile
+      - Deploy:
+          requires:
+            - Code Compile        
   Helm Helloworld: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
+    
     jobs:
       - Code Compile
       - Blackduck Scan
@@ -152,16 +181,19 @@ workflows:
       - Artifact Publish:
           requires:
             - Code Compile             
-      - hold:
-          type: approval
-          requires:
-            - Docker Publish
-            - Helm Publish            
+      # - hold:
+      #     type: approval
+      #     requires:
+      #       - Docker Publish
+      #       - Helm Publish            
       - Deploy:
           requires:
-            - hold
-            # - Helm Publish
-            # - Docker Publish             
+            # - hold
+            - Helm Publish
+            - Docker Publish             
 
-         
+  # We run a nightly build for running build/maintenance tasks
+  # such as pulling in docker image tags or automating our api documentation
+  # Triggered every day at 08:00 AM on master branch
+   
 
