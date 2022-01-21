@@ -54,10 +54,7 @@ jobs:
 
   Docker Build:
     docker:
-      - image: kartikjena33/nginx
-        auth:
-          username: kartikjena33
-          password: $DOCKER_HUB_CREDENTIAL     
+      - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
