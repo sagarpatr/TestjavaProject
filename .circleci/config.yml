@@ -243,7 +243,10 @@ workflows:
                 only:  # only branches matching the below regex filters will run
                   # - dev
                   # - /user-.*/
-                  - dev
+                  - feature
+        - Blackduck Scan
+        - Coverity Scan
+        - Sonar Scan                  
         # - test_stage:
         #     filters:
         #       branches:
