@@ -243,7 +243,7 @@ workflows:
                 only:  # only branches matching the below regex filters will run
                   # - dev
                   # - /user-.*/
-                  - feature
+                  - dev
         # - test_stage:
         #     filters:
         #       branches:
