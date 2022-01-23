@@ -234,7 +234,24 @@ workflows:
           requires:
             # - hold
             - Helm Publish
-            - Docker Publish             
+            - Docker Publish        
+  dev_stage_pre-prod:
+      jobs:
+        - Code Compile:
+            filters:  # using regex filters requires the entire branch to match
+              branches:
+                only:  # only branches matching the below regex filters will run
+                  # - dev
+                  # - /user-.*/
+                  - feature
+        # - test_stage:
+        #     filters:
+        #       branches:
+        #         only: stage
+        # - test_pre-prod:
+        #     filters:
+        #       branches:
+        #         only: /pre-prod(?:-.+)?$/                 
 
   # We run a nightly build for running build/maintenance tasks
   # such as pulling in docker image tags or automating our api documentation
