@@ -189,6 +189,7 @@ workflows:
       - Blackduck Scan
       - Coverity Scan
       - Sonar Scan
+      - Helm Build
       - Code Test:
           requires:
             - Code Compile
@@ -198,9 +199,9 @@ workflows:
       - Docker Publish:
           requires:
             - Docker Build
-      - Helm Build:
-          requires:
-            - Code Compile
+      # - Helm Build:
+      #     requires:
+      #       - Code Compile
       - Helm Publish:
           requires:
             - Helm Build 
