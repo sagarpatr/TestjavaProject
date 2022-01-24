@@ -25,9 +25,9 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference      
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-    working_directory: *workspace_root  
+    # working_directory: *workspace_root  
     steps:
-      - *attach_workspace
+      # - *attach_workspace
       - checkout      
       - run:
           name: Code Compile
@@ -39,12 +39,12 @@ jobs:
             pwd
             ls -l 
             mvn -v
-      - persist_to_workspace:
-          root: *workspace_root       
-          paths: 
-            - "*"
-            # - deployment
-            # - docker        
+      # - persist_to_workspace:
+      #     root: *workspace_root       
+      #     paths: 
+      #       - "*"
+      #       # - deployment
+      #       # - docker        
 
   Sonar Scan:
     docker:
@@ -73,11 +73,11 @@ jobs:
   Code Test:
     docker:
       - image: cimg/openjdk:11.0
-    working_directory: *workspace_root  
+    # working_directory: *workspace_root    
     parallelism: 4  
     steps:
-      - *attach_workspace
-      # - checkout      
+      # - *attach_workspace              
+      - checkout      
       - run:
           name: Code Test
           command: |
@@ -207,57 +207,57 @@ workflows:
       - Blackduck Scan
       - Coverity Scan
       - Sonar Scan
-      - Code Test:
-          requires:
-            - Code Compile
-      - Docker Build:
-          requires:
-            - Code Compile            
-      - Docker Publish:
-          requires:
-            - Docker Build
-      - Helm Build:
-          requires:
-            - Code Compile
-      - Helm Publish:
-          requires:
-            - Helm Build 
-      - Artifact Publish:
-          requires:
-            - Code Compile             
-      # - hold:
-      #     type: approval
-      #     requires:
-      #       - Docker Publish
-      #       - Helm Publish            
-      - Deploy:
-          requires:
-            # - hold
-            - Helm Publish
-            - Docker Publish        
-  dev_stage_pre-prod:
-      jobs:
-        - Code Compile:
-            filters:  # using regex filters requires the entire branch to match
-              branches:
-                only:  # only branches matching the below regex filters will run
-                  # - dev
-                  # - /user-.*/
-                  - feature
-        - Blackduck Scan
-        - Coverity Scan
-        - Sonar Scan                  
-        # - test_stage:
-        #     filters:
-        #       branches:
-        #         only: stage
-        # - test_pre-prod:
-        #     filters:
-        #       branches:
-        #         only: /pre-prod(?:-.+)?$/                 
+  #     - Code Test:
+  #         requires:
+  #           - Code Compile
+  #     - Docker Build:
+  #         requires:
+  #           - Code Compile            
+  #     - Docker Publish:
+  #         requires:
+  #           - Docker Build
+  #     - Helm Build:
+  #         requires:
+  #           - Code Compile
+  #     - Helm Publish:
+  #         requires:
+  #           - Helm Build 
+  #     - Artifact Publish:
+  #         requires:
+  #           - Code Compile             
+  #     # - hold:
+  #     #     type: approval
+  #     #     requires:
+  #     #       - Docker Publish
+  #     #       - Helm Publish            
+  #     - Deploy:
+  #         requires:
+  #           # - hold
+  #           - Helm Publish
+  #           - Docker Publish        
+  # dev_stage_pre-prod:
+  #     jobs:
+  #       - Code Compile:
+  #           filters:  # using regex filters requires the entire branch to match
+  #             branches:
+  #               only:  # only branches matching the below regex filters will run
+  #                 # - dev
+  #                 # - /user-.*/
+  #                 - feature
+  #       - Blackduck Scan
+  #       - Coverity Scan
+  #       - Sonar Scan                  
+  #       # - test_stage:
+  #       #     filters:
+  #       #       branches:
+  #       #         only: stage
+  #       # - test_pre-prod:
+  #       #     filters:
+  #       #       branches:
+  #       #         only: /pre-prod(?:-.+)?$/                 
 
-  # We run a nightly build for running build/maintenance tasks
-  # such as pulling in docker image tags or automating our api documentation
-  # Triggered every day at 08:00 AM on master branch
+  # # We run a nightly build for running build/maintenance tasks
+  # # such as pulling in docker image tags or automating our api documentation
+  # # Triggered every day at 08:00 AM on master branch
    
 
