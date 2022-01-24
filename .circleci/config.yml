@@ -5,7 +5,7 @@ version: 2.1
 parameters:
   run_integration_tests:
     type: boolean
-    default: false
+    default: true
   run-schedule:
     type: boolean
     default: false    
@@ -204,10 +204,10 @@ workflows:
             - Docker Publish   
 
 
-  # integration_tests:
-  #   when: << pipeline.parameters.run_integration_tests  >>
-  #   jobs:
-  #     - Integration Test
+  integration_tests:
+    when: << pipeline.parameters.run_integration_tests  >>
+    jobs:
+      - Integration Test
 
 
   # nightly-build:
