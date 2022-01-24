@@ -168,13 +168,13 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  integration_tests:
-    when: << pipeline.parameters.run_integration_tests  >>
-    requires:
-      - Helm Helloworld      
-    jobs:
-      - Integration Test
-  
+  # integration_tests:
+  #   when: << pipeline.parameters.run_integration_tests  >>
+  #   requires:
+  #     - Helm Helloworld      
+  #   jobs:
+  #     - Integration Test
+
 
   nightly-build:
     when: << pipeline.parameters.run-schedule >>
@@ -222,7 +222,13 @@ workflows:
           requires:
             - hold
   #           - Helm Publish
-  #           - Docker Publish        
+  #           - Docker Publish      
+  integration_tests:
+    when: << pipeline.parameters.run_integration_tests  >>
+    requires:
+      - Helm Helloworld      
+    jobs:
+      - Integration Test      
   # dev_stage_pre-prod:
   #     jobs:
   #       - Code Compile:
