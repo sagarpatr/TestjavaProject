@@ -189,19 +189,19 @@ workflows:
       - Helm Publish:
           requires:
             - Helm Build 
-      # - Artifact Publish:
-      #     requires:
-      #       - Code Compile             
-  #     - hold:
-  #         type: approval
-  #         requires:
-  #           - Docker Publish
-  #           - Helm Publish            
-  #     - Deploy:
-  #         requires:
-  #           - hold
-  #           - Helm Publish
-  #           - Docker Publish   
+      - Artifact Publish:
+          requires:
+            - Code Compile             
+      - hold:
+          type: approval
+          requires:
+            - Docker Publish
+            - Helm Publish            
+      - Deploy:
+          requires:
+            - hold
+            - Helm Publish
+            - Docker Publish   
 
 
   # integration_tests:
