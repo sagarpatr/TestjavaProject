@@ -170,10 +170,11 @@ jobs:
 workflows:
   integration_tests:
     when: << pipeline.parameters.run_integration_tests  >>
+    requires:
+      - Helm Helloworld      
     jobs:
       - Integration Test
-        requires:
-          - Helm Helloworld       
+  
 
   nightly-build:
     when: << pipeline.parameters.run-schedule >>
