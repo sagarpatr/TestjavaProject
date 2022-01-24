@@ -4,7 +4,7 @@ version: 2.1
 parameters:
   run_integration_tests:
     type: boolean
-    default: false
+    default: true
   run-schedule:
     type: boolean
     default: false    
@@ -151,7 +151,16 @@ jobs:
       - checkout
       - run:
           name: Artifact Publish
-          command: echo "Artifact publish execution"             
+          command: echo "Artifact publish execution"     
+
+  Integration Test:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: Integration test
+          command: echo "Integration test execution"                  
 
   Deploy:
     docker:
