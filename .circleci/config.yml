@@ -177,9 +177,9 @@ workflows:
       - Coverity Scan
       - Sonar Scan
       - Helm Build
-      # - Code Test:
-      #     requires:
-      #       - Code Compile
+      - Code Test:
+          requires:
+            - Code Compile
       # - Docker Build:
       #     requires:
       #       - Code Compile            
