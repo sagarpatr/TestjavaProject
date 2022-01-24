@@ -5,7 +5,7 @@ version: 2.1
 parameters:
   run_integration_tests:
     type: boolean
-    default: true
+    default: false
   run-schedule:
     type: boolean
     default: false    
@@ -220,6 +220,7 @@ workflows:
       - Deploy:
           requires:
             - Code Compile           
+
 
 
   # dev_stage_pre-prod:
