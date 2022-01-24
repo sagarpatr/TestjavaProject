@@ -207,14 +207,14 @@ workflows:
       - Artifact Publish:
           requires:
             - Code Compile             
-      # - hold:
-      #     type: approval
-      #     requires:
-      #       - Docker Publish
-      #       - Helm Publish            
+      - hold:
+          type: approval
+          requires:
+            - Docker Publish
+            - Helm Publish            
       - Deploy:
           requires:
-            # - hold
+            - hold
   #           - Helm Publish
   #           - Docker Publish        
   # dev_stage_pre-prod:
