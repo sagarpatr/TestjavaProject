@@ -223,18 +223,18 @@ workflows:
 
 
 
-  # dev_stage_pre-prod:
-  #     jobs:
-  #       - Code Compile:
-  #           filters:  # using regex filters requires the entire branch to match
-  #             branches:
-  #               only:  # only branches matching the below regex filters will run
-  #                 # - dev
-  #                 # - /user-.*/
-  #                 - feature
-  #       - Blackduck Scan
-  #       - Coverity Scan
-  #       - Sonar Scan     
+  dev_stage_pre-prod:
+      jobs:
+        - Code Compile:
+            filters:  # using regex filters requires the entire branch to match
+              branches:
+                only:  # only branches matching the below regex filters will run
+                  # - dev
+                  # - /user-.*/
+                  - feature
+        - Blackduck Scan
+        - Coverity Scan
+        - Sonar Scan     
 
         # - test_stage:
         #     filters:
