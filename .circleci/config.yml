@@ -207,9 +207,9 @@ workflows:
       - Blackduck Scan
       - Coverity Scan
       - Sonar Scan
-  #     - Code Test:
-  #         requires:
-  #           - Code Compile
+      - Code Test:
+          requires:
+            - Code Compile
   #     - Docker Build:
   #         requires:
   #           - Code Compile            
