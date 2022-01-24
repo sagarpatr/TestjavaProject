@@ -1,57 +1,263 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+parameters:
+  run_integration_tests:
+    type: boolean
+    default: false
+  run-schedule:
+    type: boolean
+    default: false    
+references:
+  workspace_root: &workspace_root  /tmp/workspace
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  Hello-World:
+  # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
+  Code Compile:
     docker:
-      - image: alpine:3.7
+      - image: sagarpatro/maven123
+        auth:
+          username: sagarpatro
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference      
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    working_directory: *workspace_root  
     steps:
+      - *attach_workspace
+      - checkout      
       - run:
-          name: Hello World
+          name: Code Compile
           command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
-  I-Have-Code:
+            echo "Code build"
+            echo "workspace path is ${CIRCLE_WORKING_DIRECTORY}"
+            pwd
+            touch test.txt test1.txt
+            pwd
+            ls -l 
+            mvn -v
+      - persist_to_workspace:
+          root: *workspace_root       
+          paths: 
+            - "*"
+            # - deployment
+            # - docker        
+
+  Sonar Scan:
     docker:
-      - image: alpine:3.7
+      - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
-          name: Code Has Arrived
-          command: |
-            ls -al
-            echo '^^^That should look familiar^^^'
-  Run-With-Node:
+          name: Sonar Scan
+          command: echo "Sonar Scan command execution" 
+  Blackduck Scan:
     docker:
-      - image: circleci/node:14-browsers
+      - image: cimg/openjdk:11.0
     steps:
+      - checkout
       - run:
-          name: Running In A Container With Node
-          command: |
-            node -v
-  Now-Complete:
+          name: Sonar Scan
+          command: echo "Blackduck Scan command execution" 
+  Coverity Scan:
     docker:
-      - image: alpine:3.7
+      - image: cimg/openjdk:11.0
     steps:
+      - checkout
       - run:
-          name: Approval Complete
+          name: Sonar Scan
+          command: echo "Coverity Scan command execution"              
+  Code Test:
+    docker:
+      - image: cimg/openjdk:11.0
+    working_directory: *workspace_root  
+    parallelism: 4  
+    steps:
+      - *attach_workspace
+      # - checkout      
+      - run:
+          name: Code Test
           command: |
-            echo 'Do work once the approval has completed'
+            echo "Code Test Started"
+            echo "The workspace path is ${CIRCLE_WORKING_DIRECTORY}"
+            touch test3.txt
+            pwd
+            ls -l 
+            mvn -v
+      - persist_to_workspace:
+          root: *workspace_root       
+          paths: 
+            - "*"            
 
+  Docker Build:
+    docker:
+      - image: cimg/openjdk:11.0
+    working_directory: *workspace_root   
+    steps:
+      - *attach_workspace
+      # - checkout
+      - run:
+          name: Docker Build
+          command: |
+            echo "execute docke rbuild command"
+            ls -l
+  Integration Test:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: Integration Test
+          command: echo "Integration test command"   
+
+  nightly-build:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: nightly build
+          command: echo "nightly build command"                   
+
+  Helm Build:
+    docker:
+      - image: cimg/openjdk:11.0
+    working_directory: *workspace_root     
+    steps:
+      # - checkout
+      - *attach_workspace
+      - run:
+          name: Helm Build
+          command: |
+            echo "execute helm build"
+            touch test4.txt
+            ls -l
+      - persist_to_workspace:
+          root: *workspace_root       
+          paths: 
+            - "*"          
+
+  Docker Publish:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: Docker Publish
+          command: echo "Docker publish execution"
+
+  Helm Publish:
+    docker:
+      - image: cimg/openjdk:11.0
+    working_directory: *workspace_root   
+    steps:
+      # - checkout
+      - *attach_workspace
+      - run:
+          name: Helm Publish
+          command: |
+            echo "Helm publish execution"   
+            ls -l
+          
+  Artifact Publish:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: Artifact Publish
+          command: echo "Artifact publish execution"             
+
+  Deploy:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: Deploy 
+          command: |
+            echo 'Hello World!'
+            echo 'This is the delivery pipeline'                               
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
- version: 2
- Example_Workflow:
-   jobs:
-     - Hello-World
-     - I-Have-Code:
-         requires:
-           - Hello-World
-     - Run-With-Node:
-         requires:
-           - Hello-World
-     - Hold-For-Approval:
-         type: approval
-         requires:
-           - Run-With-Node
-           - I-Have-Code
-     - Now-Complete:
-         requires:
-           - Hold-For-Approval
+  integration_tests:
+    when: << pipeline.parameters.run_integration_tests  >>
+    jobs:
+      - Integration Test
+  nightly-build:
+    when: << pipeline.parameters.run-schedule >>
+    jobs:
+      - Code Compile
+      - Code Test:
+          requires:
+            - Code Compile
+      - Deploy:
+          requires:
+            - Code Compile        
+  Helm Helloworld: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    
+    jobs:
+      - Code Compile
+      - Blackduck Scan
+      - Coverity Scan
+      - Sonar Scan
+      - Code Test:
+          requires:
+            - Code Compile
+      - Docker Build:
+          requires:
+            - Code Compile            
+      - Docker Publish:
+          requires:
+            - Docker Build
+      - Helm Build:
+          requires:
+            - Code Compile
+      - Helm Publish:
+          requires:
+            - Helm Build 
+      - Artifact Publish:
+          requires:
+            - Code Compile             
+      # - hold:
+      #     type: approval
+      #     requires:
+      #       - Docker Publish
+      #       - Helm Publish            
+      - Deploy:
+          requires:
+            # - hold
+            - Helm Publish
+            - Docker Publish        
+  dev_stage_pre-prod:
+      jobs:
+        - Code Compile:
+            filters:  # using regex filters requires the entire branch to match
+              branches:
+                only:  # only branches matching the below regex filters will run
+                  # - dev
+                  # - /user-.*/
+                  - feature
+        - Blackduck Scan
+        - Coverity Scan
+        - Sonar Scan                  
+        # - test_stage:
+        #     filters:
+        #       branches:
+        #         only: stage
+        # - test_pre-prod:
+        #     filters:
+        #       branches:
+        #         only: /pre-prod(?:-.+)?$/                 
+
+  # We run a nightly build for running build/maintenance tasks
+  # such as pulling in docker image tags or automating our api documentation
+  # Triggered every day at 08:00 AM on master branch
+   
+
