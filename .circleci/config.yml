@@ -192,11 +192,11 @@ workflows:
       - Artifact Publish:
           requires:
             - Code Compile             
-      - hold:
-          type: approval
-          requires:
-            - Docker Publish
-            - Helm Publish            
+      # - hold:
+      #     type: approval
+      #     requires:
+      #       - Docker Publish
+      #       - Helm Publish            
       - Deploy:
           requires:
             # - hold
@@ -208,12 +208,7 @@ workflows:
     when: << pipeline.parameters.run_integration_tests  >>
     jobs:
       - Integration Test
-      # - Code Compile
-      # - Code Test   
-      # - Docker Build
-      # - Docker Publish
-      # - Helm Build
-      # - Helm Publish
+
 
   nightly-build:
     when: << pipeline.parameters.run-schedule >>
