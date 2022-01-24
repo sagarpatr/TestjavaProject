@@ -192,29 +192,29 @@ workflows:
       - Code Test:
           requires:
             - Code Compile
-  #     - Docker Build:
-  #         requires:
-  #           - Code Compile            
-  #     - Docker Publish:
-  #         requires:
-  #           - Docker Build
-  #     - Helm Build:
-  #         requires:
-  #           - Code Compile
-  #     - Helm Publish:
-  #         requires:
-  #           - Helm Build 
-  #     - Artifact Publish:
-  #         requires:
-  #           - Code Compile             
-  #     # - hold:
-  #     #     type: approval
-  #     #     requires:
-  #     #       - Docker Publish
-  #     #       - Helm Publish            
-  #     - Deploy:
-  #         requires:
-  #           # - hold
+      - Docker Build:
+          requires:
+            - Code Compile            
+      - Docker Publish:
+          requires:
+            - Docker Build
+      - Helm Build:
+          requires:
+            - Code Compile
+      - Helm Publish:
+          requires:
+            - Helm Build 
+      - Artifact Publish:
+          requires:
+            - Code Compile             
+      # - hold:
+      #     type: approval
+      #     requires:
+      #       - Docker Publish
+      #       - Helm Publish            
+      - Deploy:
+          requires:
+            # - hold
   #           - Helm Publish
   #           - Docker Publish        
   # dev_stage_pre-prod:
