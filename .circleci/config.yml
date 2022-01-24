@@ -95,6 +95,7 @@ jobs:
           command: |
             echo "execute docke rbuild command"
             ls -l
+
   Integration Test:
     docker:
       - image: cimg/openjdk:11.0
@@ -159,7 +160,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Integration test
+          name: Integration Test
           command: echo "Integration test execution"                  
 
   Deploy:
@@ -180,6 +181,7 @@ workflows:
     when: << pipeline.parameters.run_integration_tests  >>
     jobs:
       - Integration Test
+
   nightly-build:
     when: << pipeline.parameters.run-schedule >>
     jobs:
