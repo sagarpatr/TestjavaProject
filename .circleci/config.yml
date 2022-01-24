@@ -8,7 +8,7 @@ parameters:
     default: true
   run-schedule:
     type: boolean
-    default: false    
+    default: true    
 # references:
 #   workspace_root: &workspace_root  /tmp/workspace
 #   attach_workspace: &attach_workspace
@@ -210,16 +210,16 @@ workflows:
       - Integration Test
 
 
-  # nightly-build:
-  #   when: << pipeline.parameters.run-schedule >>
-  #   jobs:
-  #     - Code Compile
-  #     - Code Test:
-  #         requires:
-  #           - Code Compile
-  #     - Deploy:
-  #         requires:
-  #           - Code Compile           
+  nightly-build:
+    when: << pipeline.parameters.run-schedule >>
+    jobs:
+      - Code Compile
+      - Code Test:
+          requires:
+            - Code Compile
+      - Deploy:
+          requires:
+            - Code Compile           
 
 
 
