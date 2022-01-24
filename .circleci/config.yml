@@ -189,9 +189,9 @@ workflows:
       - Helm Publish:
           requires:
             - Helm Build 
-      - Artifact Publish:
-          requires:
-            - Code Compile             
+      # - Artifact Publish:
+      #     requires:
+      #       - Code Compile             
   #     - hold:
   #         type: approval
   #         requires:
