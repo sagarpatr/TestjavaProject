@@ -180,18 +180,18 @@ workflows:
       - Code Test:
           requires:
             - Code Compile
-  #     - Docker Build:
-  #         requires:
-  #           - Code Compile            
-  #     - Docker Publish:
-  #         requires:
-  #           - Docker Build
-  #     - Helm Publish:
-  #         requires:
-  #           - Helm Build 
-  #     - Artifact Publish:
-  #         requires:
-  #           - Code Compile             
+      - Docker Build:
+          requires:
+            - Code Compile            
+      - Docker Publish:
+          requires:
+            - Docker Build
+      - Helm Publish:
+          requires:
+            - Helm Build 
+      - Artifact Publish:
+          requires:
+            - Code Compile             
   #     - hold:
   #         type: approval
   #         requires:
