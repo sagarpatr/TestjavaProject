@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  kubernetes: circleci/kubernetes@x.y.z
 jobs:
   Hello-World:
     docker:
@@ -35,6 +37,16 @@ jobs:
           name: Approval Complete
           command: |
             echo 'Do work once the approval has completed'
+  delete:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - kubernetes/install-kubectl
+      - kubernetes/delete-resource:
+          now: true
+          resource-names: nginx-deployment
+          resource-types: deployments
+          wait: true            
 
 workflows:
  version: 2
