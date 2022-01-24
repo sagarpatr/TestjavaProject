@@ -8,11 +8,11 @@ parameters:
   run-schedule:
     type: boolean
     default: false    
-references:
-  workspace_root: &workspace_root  /tmp/workspace
-  attach_workspace: &attach_workspace
-    attach_workspace:
-      at: *workspace_root
+# references:
+#   workspace_root: &workspace_root  /tmp/workspace
+#   attach_workspace: &attach_workspace
+#     attach_workspace:
+#       at: *workspace_root
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -25,26 +25,23 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference      
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-    working_directory: *workspace_root  
+    # working_directory: *workspace_root  
     steps:
-      - *attach_workspace
+      # - *attach_workspace
       - checkout      
       - run:
           name: Code Compile
           command: |
             echo "Code build"
             echo "workspace path is ${CIRCLE_WORKING_DIRECTORY}"
-            pwd
-            touch test.txt test1.txt
-            pwd
             ls -l 
             mvn -v
-      - persist_to_workspace:
-          root: *workspace_root       
-          paths: 
-            - "*"
-            # - deployment
-            # - docker        
+      # - persist_to_workspace:
+      #     root: *workspace_root       
+      #     paths: 
+      #       - "*"
+      #       # - deployment
+      #       # - docker        
 
   Sonar Scan:
     docker:
@@ -76,15 +73,12 @@ jobs:
     working_directory: *workspace_root    
     parallelism: 4  
     steps:
-      - *attach_workspace              
+      # - *attach_workspace              
       # - checkout      
       - run:
           name: Code Test
           command: |
             echo "Code Test Started"
-            echo "The workspace path is ${CIRCLE_WORKING_DIRECTORY}"
-            touch test3.txt
-            pwd
             ls -l 
             mvn -v
       # - persist_to_workspace:
@@ -95,9 +89,7 @@ jobs:
   Docker Build:
     docker:
       - image: cimg/openjdk:11.0
-    working_directory: *workspace_root   
     steps:
-      - *attach_workspace
       # - checkout
       - run:
           name: Docker Build
@@ -125,21 +117,14 @@ jobs:
   Helm Build:
     docker:
       - image: cimg/openjdk:11.0
-    working_directory: *workspace_root     
     steps:
-      # - checkout
-      - *attach_workspace
+      - checkout
       - run:
           name: Helm Build
           command: |
             echo "execute helm build"
             touch test4.txt
             ls -l
-      - persist_to_workspace:
-          root: *workspace_root       
-          paths: 
-            - "*"          
-
   Docker Publish:
     docker:
       - image: cimg/openjdk:11.0
@@ -152,10 +137,8 @@ jobs:
   Helm Publish:
     docker:
       - image: cimg/openjdk:11.0
-    working_directory: *workspace_root   
     steps:
-      # - checkout
-      - *attach_workspace
+      - checkout
       - run:
           name: Helm Publish
           command: |
@@ -207,9 +190,9 @@ workflows:
       - Blackduck Scan
       - Coverity Scan
       - Sonar Scan
-      - Code Test:
-          requires:
-            - Code Compile
+      # - Code Test:
+      #     requires:
+      #       - Code Compile
   #     - Docker Build:
   #         requires:
   #           - Code Compile            
