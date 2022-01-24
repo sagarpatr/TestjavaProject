@@ -154,15 +154,6 @@ jobs:
           name: Artifact Publish
           command: echo "Artifact publish execution"     
 
-  Integration Test:
-    docker:
-      - image: cimg/openjdk:11.0
-    steps:
-      - checkout
-      - run:
-          name: Integration Test
-          command: echo "Integration test execution"                  
-
   Deploy:
     docker:
       - image: cimg/openjdk:11.0
