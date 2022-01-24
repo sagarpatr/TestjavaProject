@@ -42,6 +42,24 @@ jobs:
       #       - "*"
       #       # - deployment
       #       # - docker        
+  Code Test:
+    docker:
+      - image: cimg/openjdk:11.0
+    # working_directory: *workspace_root    
+    # parallelism: 4  
+    steps:
+      # - *attach_workspace              
+      # - checkout      
+      - run:
+          name: Code Test
+          command: |
+            echo "Code Test Started"
+            ls -l 
+            mvn -v
+      # - persist_to_workspace:
+      #     root: *workspace_root       
+      #     paths: 
+      #       - "*"        
 
   Sonar Scan:
     docker:
@@ -67,25 +85,6 @@ jobs:
       - run:
           name: Sonar Scan
           command: echo "Coverity Scan command execution"              
-  Code Test:
-    docker:
-      - image: cimg/openjdk:11.0
-    # working_directory: *workspace_root    
-    # parallelism: 4  
-    steps:
-      # - *attach_workspace              
-      # - checkout      
-      - run:
-          name: Code Test
-          command: |
-            echo "Code Test Started"
-            ls -l 
-            mvn -v
-      # - persist_to_workspace:
-      #     root: *workspace_root       
-      #     paths: 
-      #       - "*"            
-
   Docker Build:
     docker:
       - image: cimg/openjdk:11.0
@@ -190,9 +189,9 @@ workflows:
       - Blackduck Scan
       - Coverity Scan
       - Sonar Scan
-      # - Code Test:
-      #     requires:
-      #       - Code Compile
+      - Code Test:
+          requires:
+            - Code Compile
   #     - Docker Build:
   #         requires:
   #           - Code Compile            
