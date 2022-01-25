@@ -21,9 +21,9 @@ jobs:
   Code Compile:
     docker:
       - image: sagarpatro/maven123
-        auth:
-          username: sagarpatro
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference      
+#         auth:
+#           username: sagarpatro
+#           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference      
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     # working_directory: *workspace_root  
@@ -177,76 +177,76 @@ workflows:
       - Coverity Scan
       - Sonar Scan
       - Helm Build
-      - Code Test:
-          requires:
-            - Code Compile
-      - Docker Build:
-          requires:
-            - Code Compile            
-      - Docker Publish:
-          requires:
-            - Docker Build
-      - Helm Publish:
-          requires:
-            - Helm Build 
-      - Artifact Publish:
-          requires:
-            - Code Compile             
-      - hold:
-          type: approval
-          requires:
-            - Docker Publish
-            - Helm Publish            
-      - Deploy:
-          requires:
-            - hold
-            - Helm Publish
-            - Docker Publish   
+#       - Code Test:
+#           requires:
+#             - Code Compile
+#       - Docker Build:
+#           requires:
+#             - Code Compile            
+#       - Docker Publish:
+#           requires:
+#             - Docker Build
+#       - Helm Publish:
+#           requires:
+#             - Helm Build 
+#       - Artifact Publish:
+#           requires:
+#             - Code Compile             
+#       - hold:
+#           type: approval
+#           requires:
+#             - Docker Publish
+#             - Helm Publish            
+#       - Deploy:
+#           requires:
+#             - hold
+#             - Helm Publish
+#             - Docker Publish   
 
 
-  integration_tests:
-    when: << pipeline.parameters.run_integration_tests  >>
-    jobs:
-      - Integration Test
+#   integration_tests:
+#     when: << pipeline.parameters.run_integration_tests  >>
+#     jobs:
+#       - Integration Test
 
 
-  nightly-build:
-    when: << pipeline.parameters.run-schedule >>
-    jobs:
-      - Code Compile
-      - Code Test:
-          requires:
-            - Code Compile
-      - Deploy:
-          requires:
-            - Code Compile           
+#   nightly-build:
+#     when: << pipeline.parameters.run-schedule >>
+#     jobs:
+#       - Code Compile
+#       - Code Test:
+#           requires:
+#             - Code Compile
+#       - Deploy:
+#           requires:
+#             - Code Compile           
 
 
 
-  dev_stage_pre-prod:
-      jobs:
-        - Code Compile:
-            filters:  # using regex filters requires the entire branch to match
-              branches:
-                only:  # only branches matching the below regex filters will run
-                  # - dev
-                  # - /user-.*/
-                  - dev
-        - Blackduck Scan
-        - Coverity Scan
-        - Sonar Scan     
+#   dev_stage_pre-prod:
+#       jobs:
+#         - Code Compile:
+#             filters:  # using regex filters requires the entire branch to match
+#               branches:
+#                 only:  # only branches matching the below regex filters will run
+#                   # - dev
+#                   # - /user-.*/
+#                   - dev
+#         - Blackduck Scan
+#         - Coverity Scan
+#         - Sonar Scan     
 
-        # - test_stage:
-        #     filters:
-        #       branches:
-        #         only: stage
-        # - test_pre-prod:
-        #     filters:
-        #       branches:
-        #         only: /pre-prod(?:-.+)?$/                 
+#         # - test_stage:
+#         #     filters:
+#         #       branches:
+#         #         only: stage
+#         # - test_pre-prod:
+#         #     filters:
+#         #       branches:
+#         #         only: /pre-prod(?:-.+)?$/                 
 
-  # # We run a nightly build for running build/maintenance tasks
-  # # such as pulling in docker image tags or automating our api documentation
-  # # Triggered every day at 08:00 AM on master branch
+#   # # We run a nightly build for running build/maintenance tasks
+#   # # such as pulling in docker image tags or automating our api documentation
+#   # # Triggered every day at 08:00 AM on master branch
    
 
